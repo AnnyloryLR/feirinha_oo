@@ -4,6 +4,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.feirinha_oo.api.repositories.ItemsRepository;
+
+import jakarta.validation.Valid;
+
+import com.feirinha_oo.api.dtos.ItemDTO;
 import com.feirinha_oo.api.models.ItemsModel;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -32,13 +37,20 @@ public class ItemsController {
     }
 
     @GetMapping("/{id}")
-    public String getItemById(@PathVariable Long id){
-        return "Receita de id " + id;
+    public Optional<ItemsModel> getItemById(@PathVariable Long id){
+        Optional<ItemsModel> item = itemsRepository.findById(id);
+
+        if(!item.isPresent()){
+            return Optional.empty();
+        }else{
+            return Optional.of(item.get());
+        }
     }
 
     @PostMapping()
-    public String createItem(@RequestBody String body){
-        return body;
+    public void createItem(@RequestBody @Valid ItemDTO body){
+        ItemsModel item =  new ItemsModel(body);
+        itemsRepository.save(item);
     }
 
     @PutMapping("/{id}")
@@ -47,8 +59,8 @@ public class ItemsController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteItem(@PathVariable Long id){
-        return "Deletando item " + id;
+    public void deleteItem(@PathVariable Long id){
+        itemsRepository.deleteById(id);
     }  
        
 }
