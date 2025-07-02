@@ -22,7 +22,7 @@ public class FeirinhaController {
 
     @GetMapping("/{id}")
     public String getItemById(@PathVariable Long id){
-        return "Receita de id" + id;
+        return "Receita de id " + id;
 
     }
 
@@ -38,7 +38,7 @@ public class FeirinhaController {
 
     @DeleteMapping("/{id}")
     public String deleteItem(@PathVariable Long id){
-        return "Deletando item" + id;
+        return "Deletando item " + id;
     }  
        
 }
