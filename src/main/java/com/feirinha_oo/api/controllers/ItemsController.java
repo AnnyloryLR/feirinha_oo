@@ -53,10 +53,10 @@ public class ItemsController {
         Optional<ItemsModel> item = itemsService.createItem(body);
 
         if(item.isPresent()){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("A item with this name already exists.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("An item with this name already exists");
         }
-        
-        return ResponseEntity.status(HttpStatus.CREATED).body(item);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/{id}")
@@ -67,7 +67,7 @@ public class ItemsController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(item);
+        return ResponseEntity.status(HttpStatus.OK).body(item.get());
     }
 
     @DeleteMapping("/{id}")
