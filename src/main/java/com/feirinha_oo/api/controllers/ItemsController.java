@@ -54,8 +54,16 @@ public class ItemsController {
     }
 
     @PutMapping("/{id}")
-    public String updateItem(@PathVariable Long id, @RequestBody String body){
-        return body;
+    public void updateItem(@PathVariable Long id, @RequestBody @Valid ItemDTO body){
+        Optional<ItemsModel> item = itemsRepository.findById(id);
+
+        if(!item.isPresent()){
+
+        }
+
+        ItemsModel editedItem = new ItemsModel(body);
+        editedItem.setId(id);
+        itemsRepository.save(editedItem);
     }
 
     @DeleteMapping("/{id}")

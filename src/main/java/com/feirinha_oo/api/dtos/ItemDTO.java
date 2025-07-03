@@ -11,6 +11,5 @@ public class ItemDTO {
     @Size(max = 50)
     private String name;
 
-    @NotBlank
     private Integer quantity;
 }
