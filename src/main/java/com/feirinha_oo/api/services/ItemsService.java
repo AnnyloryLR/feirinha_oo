@@ -32,10 +32,14 @@ public class ItemsService {
         }
     }
 
-    public ItemsModel createItem(ItemDTO body){
+    public Optional<ItemsModel> createItem(ItemDTO body){
+        if(itemsRepository.existsByName(body.getName())){
+            return Optional.empty();
+        }
+
         ItemsModel item =  new ItemsModel(body);
         itemsRepository.save(item);
-        return item;
+        return Optional.of(item);
     }
 
     public Optional<ItemsModel> updateItem(Long id, ItemDTO body){

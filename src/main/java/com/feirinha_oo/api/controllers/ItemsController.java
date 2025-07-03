@@ -50,7 +50,11 @@ public class ItemsController {
 
     @PostMapping()
     public ResponseEntity<Object> createItem(@RequestBody @Valid ItemDTO body){
-        ItemsModel item = itemsService.createItem(body);
+        Optional<ItemsModel> item = itemsService.createItem(body);
+
+        if(item.isPresent()){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("A item with this name already exists.");
+        }
         
         return ResponseEntity.status(HttpStatus.CREATED).body(item);
     }
@@ -67,8 +71,9 @@ public class ItemsController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteItem(@PathVariable Long id){
+    public  ResponseEntity<Object> deleteItem(@PathVariable Long id){
         itemsService.deleteItem(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }  
        
 }
