@@ -10,6 +10,8 @@ import jakarta.validation.Valid;
 import com.feirinha_oo.api.dtos.ItemDTO;
 import com.feirinha_oo.api.models.ItemsModel;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,43 +33,42 @@ public class ItemsController {
     }
 
     @GetMapping()
-    public List<ItemsModel> getItems(){
-        return itemsRepository.findAll();
+    public ResponseEntity<Object> getItems(){
+        return ResponseEntity.status(HttpStatus.OK).body(itemsService.getItems());
     }
 
     @GetMapping("/{id}")
-    public Optional<ItemsModel> getItemById(@PathVariable Long id){
-        Optional<ItemsModel> item = itemsRepository.findById(id);
+    public ResponseEntity<Object> getItemById(@PathVariable Long id){
+        Optional<ItemsModel> item = itemsService.getItemById(id);
 
         if(!item.isPresent()){
-            return Optional.empty();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item with this id not found!");
         }else{
-            return Optional.of(item.get());
+            return ResponseEntity.status(HttpStatus.OK).body(item.get());
         }
     }
 
     @PostMapping()
-    public void createItem(@RequestBody @Valid ItemDTO body){
-        ItemsModel item =  new ItemsModel(body);
-        itemsRepository.save(item);
+    public ResponseEntity<Object> createItem(@RequestBody @Valid ItemDTO body){
+        ItemsModel item = itemsService.createItem(body);
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(item);
     }
 
     @PutMapping("/{id}")
-    public void updateItem(@PathVariable Long id, @RequestBody @Valid ItemDTO body){
-        Optional<ItemsModel> item = itemsRepository.findById(id);
+    public ResponseEntity<Object> updateItem(@PathVariable Long id, @RequestBody @Valid ItemDTO body){
+        Optional<ItemsModel> item = itemsService.updateItem(id, body);
 
         if(!item.isPresent()){
-
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        ItemsModel editedItem = new ItemsModel(body);
-        editedItem.setId(id);
-        itemsRepository.save(editedItem);
+        return ResponseEntity.status(HttpStatus.OK).body(item);
     }
 
     @DeleteMapping("/{id}")
     public void deleteItem(@PathVariable Long id){
-        itemsRepository.deleteById(id);
+        itemsService.deleteItem(id);
     }  
        
 }
