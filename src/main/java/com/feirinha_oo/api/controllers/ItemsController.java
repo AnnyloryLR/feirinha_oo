@@ -3,7 +3,7 @@ package com.feirinha_oo.api.controllers;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.feirinha_oo.api.repositories.ItemsRepository;
+import com.feirinha_oo.api.services.ItemsService;
 
 import jakarta.validation.Valid;
 
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
-import java.util.List;
 import java.util.Optional;
 
 
@@ -25,10 +24,10 @@ import java.util.Optional;
 @RequestMapping("/items")
 public class ItemsController {
 
-    final ItemsRepository itemsRepository;
+    final ItemsService itemsService;
 
-    ItemsController( ItemsRepository itemsRepository ){
-        this.itemsRepository = itemsRepository;
+    ItemsController( ItemsService itemsService ){
+        this.itemsService = itemsService;
     }
 
     @GetMapping()
