@@ -52,11 +52,11 @@ public class ItemsController {
     public ResponseEntity<Object> createItem(@RequestBody @Valid ItemDTO body){
         Optional<ItemsModel> item = itemsService.createItem(body);
 
-        if(item.isPresent()){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("An item with this name already exists");
+        if(!item.isPresent()){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("An item with this name already exists.");
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(item.get());
     }
 
     @PutMapping("/{id}")
